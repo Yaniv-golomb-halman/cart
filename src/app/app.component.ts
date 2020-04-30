@@ -26,6 +26,11 @@ import {Cart, Item} from './cart';
         {{product.image}}
       </li>
     </ul>
+    <ul>
+      <li *ngFor="let r of cart1.GetAmount();">
+        <h1> {{r}}</h1>
+      </li>
+    </ul>
     <h1>{{a()}}</h1>
     <button (click)="something()">something</button>
   `,
@@ -51,14 +56,9 @@ export class AppComponent implements OnInit {
     return this.cart1.GetTotalPrice().toString();
   }
 
-  b(): string {
-    this.cart1.update(this.cart1.GetProducts()[0], this.cart1.GetProducts()[1]);
-    this.cart1 = this.cart1;
-    return this.cart1.GetTotalPrice().toString() + 's';
-  }
-
   something(): void {
-    this.a = this.b;
+    this.cart1.update(this.cart1.GetProducts()[2], -2);
+    this.cart1 = this.cart1;
   }
 }
 
