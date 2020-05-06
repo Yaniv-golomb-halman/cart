@@ -1,10 +1,4 @@
-export interface Item {
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  limit?: number;
-}
+import {Item} from './item';
 
 export class Cart {
   private totalPrice: number;

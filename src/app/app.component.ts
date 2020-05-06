@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
   something(): void {
     const item: Item = {
       name: 'Oatmeal',
-      description: 'rjrjnr;r',
+      description: 'rjrjnr',
       price: 330.00,
       image: '../assets/images/oatmeal.jpg',
       limit: 20
