@@ -12,7 +12,8 @@ export class AppComponent {
 */
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Cart, Item} from './cart';
+import {Cart} from './cart';
+import {Product} from './Product';
 
 @Component({
   selector: 'app-root',
@@ -31,21 +32,22 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.httpClient.get('assets/products.json').subscribe(data => {
       console.log(data);
-      let Items1: Item[] = data;
+      let product: Product[] = data;
       this.cart = new Cart();
-      this.cart.addItems(Items1);
+      this.cart.addItems(product);
     });
   }
 
   something(): void {
-    const item: Item = {
+    console.log(this.cart);
+    const product: Product = {
       name: 'Oatmeal',
       description: 'rjrjnr',
       price: 330.00,
       image: '../assets/images/oatmeal.jpg',
       limit: 20
     };
-    this.cart.remove(item);
+    this.cart.remove(product);
     console.log(this.cart);
   }
 }
