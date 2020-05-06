@@ -1,5 +1,3 @@
-import {isBooleanLiteralLike} from 'codelyzer/util/utils';
-
 export interface Item {
   name: string;
   description: string;
@@ -9,26 +7,12 @@ export interface Item {
 }
 
 export class Cart {
-  private products: Item[];
-  private  Amount: number[];
   private totalPrice: number;
+  public NameToAmount: Record<string, number>;
 
   constructor() {
-    this.products = [];
-    this.Amount = [];
     this.totalPrice = 0;
-  }
-
-  GetProducts(): Item[] {
-    return this.products;
-  }
-
-  GetAmount(): number [] {
-    return this.Amount;
-  }
-
-  GetTotalPrice(): number {
-    return this.totalPrice;
+    this.NameToAmount = {};
   }
 
   addItems(Items: Item []): void {
@@ -37,64 +21,30 @@ export class Cart {
     }
   }
 
-  WhereExist(Item1: Item): number | false {
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i] === Item1) {
-        return i;
-      }
-    }
-    return false;
+  add(item: Item) {
+    this.totalPrice += item.price;
+    this.NameToAmount[item.name] = 1;
   }
 
-  add(Item1: Item): boolean {
-    const WhereItem1Exist: false | number = this.WhereExist(Item1);
-    if (WhereItem1Exist === false) {
-      this.products.push(Item1);
-      this.Amount.push(1);
-      this.totalPrice += Item1.price;
-      return true;
+  remove(item: Item) {
+    if (item.name in this.NameToAmount) {
+      delete this.NameToAmount[item.name];
     }
-    if (Item1.limit === this.Amount[WhereItem1Exist]) {
-      return false;
-    }
-    this.Amount[WhereItem1Exist]++;
   }
 
-  remove(Item1: Item): boolean {
-    const WhereItem1Exist: false | number = this.WhereExist(Item1);
-    if (WhereItem1Exist === false) {
-      return false;
-    }
-    this.Amount[WhereItem1Exist]--;
-    if (this.Amount[WhereItem1Exist] === 0) {
-      this.products.splice(WhereItem1Exist, 1);
-      this.Amount.splice(WhereItem1Exist, 1);
-    }
-    this.totalPrice -= Item1.price;
-  }
-
-  update(Item1: Item, ByHowMuch: number): boolean {
-    const WhereItem1Exist: false | number = this.WhereExist(Item1);
-    if (WhereItem1Exist === false) {
-      return false;
-    }
-    let newAmoAmount: number = this.Amount[WhereItem1Exist] + ByHowMuch;
-    if (newAmoAmount <= 0) {
-      this.totalPrice -= Item1.price * this.Amount[WhereItem1Exist];
-      this.products.splice(WhereItem1Exist, 1);
-      this.Amount.splice(WhereItem1Exist, 1);
+  update(item: Item, ToWhat: number) {
+    if (ToWhat > item.limit) {
       return;
     }
-    if (newAmoAmount >= Item1.limit) {
-      newAmoAmount = Item1.limit;
+    if (item.name in this.NameToAmount) {
+      this.totalPrice += item.price * (ToWhat - this.NameToAmount[item.name]);
+      this.NameToAmount[item.name] = ToWhat;
     }
-    this.Amount[WhereItem1Exist] = newAmoAmount;
-    this.totalPrice += Item1.price * ByHowMuch;
   }
 
   checkout(): number {
-    this.products = [];
     this.totalPrice = 0;
+    this.NameToAmount = {};
     return this.totalPrice;
   }
 
