@@ -1,6 +1,6 @@
 import {Product} from './product';
 
-export class Cart {
+export class cart {
   private totalPrice: number;
   public NameToAmount: Record<string, number>;
 
@@ -9,38 +9,35 @@ export class Cart {
     this.NameToAmount = {};
   }
 
-  addItems(products: Product []): void {
-    for (let i = 0; i < products.length; i++) {
-      this.add(products[i]);
-    }
+  addItems(products: Product []) {
+    products.forEach(product => this.add(product));
   }
 
-  add(product: Product): void  {
+  add(product: Product) {
     this.totalPrice += product.price;
     this.NameToAmount[product.name] = 1;
   }
 
-  remove(product: Product): void  {
-    if (this.NameToAmount[product.name] !== undefined) {
+  remove(product: Product) {
+    if (!this.NameToAmount[product.name]) {
       this.totalPrice -= product.price * this.NameToAmount[product.name];
       delete this.NameToAmount[product.name];
     }
   }
 
-  update(product: Product, ToWhat: number): void  {
-    if (ToWhat > product.limit) {
+  update(product: Product, amount: number) {
+    if (amount > product.limit) {
       return;
     }
-    if (this.NameToAmount[product.name] !== undefined) {
-      this.totalPrice += product.price * (ToWhat - this.NameToAmount[product.name]);
-      this.NameToAmount[product.name] = ToWhat;
+    if (!this.NameToAmount[product.name]) {
+      this.totalPrice += product.price * (amount - this.NameToAmount[product.name]);
+      this.NameToAmount[product.name] = amount;
     }
   }
 
-  checkout(): number {
+  checkout() {
     this.totalPrice = 0;
     this.NameToAmount = {};
-    return this.totalPrice;
   }
 
 }

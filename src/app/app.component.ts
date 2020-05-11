@@ -1,18 +1,6 @@
-/*
-import { Component } from '@angular/core';
-
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
-})
-export class AppComponent {
-  title = 'untitled2';
-}
-*/
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {Cart} from './cart';
+import {cart} from './cart';
 import {Product} from './Product';
 
 @Component({
@@ -24,17 +12,14 @@ import {Product} from './Product';
 })
 export class AppComponent implements OnInit {
   title = 'Angular Example';
-  cart: Cart;
+  cart: cart;
 
   constructor(private httpClient: HttpClient) {
   }
 
   ngOnInit() {
-    this.httpClient.get('assets/products.json').subscribe(data => {
-      console.log(data);
-      let product: Product[] = data;
-      this.cart = new Cart();
-      this.cart.addItems(product);
+    this.httpClient.get('assets/products.json').subscribe((data: Product[]) => {
+      this.cart.addItems(data);
     });
   }
 
